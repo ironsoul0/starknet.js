@@ -278,3 +278,15 @@ export default {
   compressProgram,
   deployContract,
 };
+
+export function waitForTxV2(txHash: BigNumberish, func: Function, retryInterval: number = 1000) {
+  const interval = setInterval(async () => {
+    const transactionResponse = await getTransactionStatus(txHash);
+    if (transactionResponse.tx_status === 'ACCEPTED_ONCHAIN') {
+      clearInterval(interval);
+      func();
+    }
+  }, retryInterval);
+
+  return interval;
+}
