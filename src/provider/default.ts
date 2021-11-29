@@ -17,7 +17,7 @@ import { BigNumberish, toBN, toHex } from '../utils/number';
 import { compressProgram, formatSignature, randomAddress } from '../utils/stark';
 import { ProviderInterface } from './interface';
 
-type NetworkName = 'alpha';
+type NetworkName = 'alpha' | 'devnet';
 
 interface ProviderOptions {
   network?: NetworkName;
@@ -40,7 +40,7 @@ export class Provider implements ProviderInterface {
       this.feederGatewayUrl = optionsOrProvider.feederGatewayUrl;
       this.gatewayUrl = optionsOrProvider.gatewayUrl;
     } else {
-      const { network = 'alpha' } = optionsOrProvider || {};
+      const { network = 'devnet' } = optionsOrProvider || {};
       const baseUrl = Provider.getNetworkFromName(network);
       this.baseUrl = baseUrl;
       this.feederGatewayUrl = `${baseUrl}/feeder_gateway`;
@@ -51,8 +51,11 @@ export class Provider implements ProviderInterface {
   protected static getNetworkFromName(name: NetworkName) {
     switch (name) {
       case 'alpha':
+        return 'https://localhost:5000';
+      case 'devnet':
+        return 'http://localhost:5000';
       default:
-        return 'https://alpha4.starknet.io';
+        return 'http://localhost:5000';
     }
   }
 
